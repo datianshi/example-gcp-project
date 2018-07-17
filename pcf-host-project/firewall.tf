@@ -45,7 +45,7 @@ resource "google_compute_firewall" "cf-public" {
   }
 
   source_ranges = ["${var.cf_public_src_range}"]
-  target_tags = ["${var.env_name}-cf-public"]
+  target_tags = ["router"]
 }
 
 resource "google_compute_firewall" "cf-internal" {
@@ -58,5 +58,5 @@ resource "google_compute_firewall" "cf-internal" {
   }
 
   source_ranges = ["${var.on_premise_range}"]
-  target_tags = ["${var.env_name}-cf-internal"]
+  target_tags = ["router"]
 }

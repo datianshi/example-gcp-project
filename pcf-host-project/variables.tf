@@ -33,7 +33,7 @@ variable "vpn_tunnel" {
 }
 variable "nat_dest_range" {
 }
-variable "project_id" {
-}
-variable "org_id" {
-}
+# variable "project_id" {
+# }
+# variable "org_id" {
+# }
