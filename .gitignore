@@ -1,0 +1,6 @@
+account.json
+provider.tf
+terraform.tfvars
+.terraform
+terraform.tfstate
+terraform.tfstate.backup
