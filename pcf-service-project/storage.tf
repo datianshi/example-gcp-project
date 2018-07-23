@@ -7,8 +7,8 @@ resource "random_id" "cloud_storage_account" {
 }
 
 resource "google_service_account" "cloud_storage" {
-  display_name = "${var.env_name} Cloud Storage"
-  account_id   = "${var.env_name}-cs-${random_id.cloud_storage_account.hex}"
+  display_name = "${var.short_env_name} Cloud Storage"
+  account_id   = "${var.short_env_name}-cs-${random_id.cloud_storage_account.hex}"
 }
 
 resource "google_service_account_key" "cloud_storage" {
@@ -22,44 +22,44 @@ resource "google_project_iam_member" "cloud_storage" {
 }
 
 resource "google_storage_bucket" "director" {
-  name          = "${var.env_name}-director-${random_id.suffix.hex}"
+  name          = "${var.short_env_name}-director-${random_id.suffix.hex}"
   storage_class = "REGIONAL"
   location = "${var.region}"
   force_destroy = true
 }
 
 resource "google_storage_bucket" "buildpacks" {
-  name          = "${var.env_name}-buildpacks-${random_id.suffix.hex}"
+  name          = "${var.short_env_name}-buildpacks-${random_id.suffix.hex}"
   storage_class = "REGIONAL"
   location = "${var.region}"
   force_destroy = true
 }
 
 resource "google_storage_bucket" "droplets" {
-  name          = "${var.env_name}-droplets-${random_id.suffix.hex}"
+  name          = "${var.short_env_name}-droplets-${random_id.suffix.hex}"
   storage_class = "REGIONAL"
   location = "${var.region}"
   force_destroy = true
 }
 
 resource "google_storage_bucket" "packages" {
-  name          = "${var.env_name}-packages-${random_id.suffix.hex}"
+  name          = "${var.short_env_name}-packages-${random_id.suffix.hex}"
   storage_class = "REGIONAL"
   location = "${var.region}"
   force_destroy = true
 }
 
 resource "google_storage_bucket" "resources" {
-  name          = "${var.env_name}-resources-${random_id.suffix.hex}"
+  name          = "${var.short_env_name}-resources-${random_id.suffix.hex}"
   storage_class = "REGIONAL"
   location = "${var.region}"
   force_destroy = true
 }
 
 resource "google_project_iam_custom_role" "cloud_storage_role" {
-  role_id     = "${var.env_name}_cloud_storage_role"
-  title       = "${var.env_name} cloud storage"
-  description = "${var.env_name} Cloud Storage Role"
+  role_id     = "${var.short_env_name}_cloud_storage_role"
+  title       = "${var.short_env_name} cloud storage"
+  description = "${var.short_env_name} Cloud Storage Role"
   permissions = [
     "storage.buckets.get"
   ]

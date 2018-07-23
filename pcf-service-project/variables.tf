@@ -1,5 +1,6 @@
 variable "env_name" {
 }
+variable "short_env_name" {}
 variable "network" {
 }
 variable "region" {
@@ -16,3 +17,5 @@ variable "opsman_machine_type" {
   default = "n1-standard-1"
 }
 variable "project" {}
+variable "shared_vpc_project" {}
+variable "opsman_service_account" {}

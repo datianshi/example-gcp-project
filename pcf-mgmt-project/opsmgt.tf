@@ -1,5 +1,6 @@
 resource "google_compute_image" "ops-manager-image" {
   name           = "${var.env_name}-ops-manager-image"
+  project = "${google_project.pcf_project.project_id}"
   create_timeout = 20
 
   raw_disk {
@@ -7,40 +8,36 @@ resource "google_compute_image" "ops-manager-image" {
   }
 }
 
-resource "google_compute_address" "opsman_ip" {
-  name         = "${var.env_name}-my-internal-address"
-  subnetwork   = "${var.infra_subnet}"
-  address_type = "INTERNAL"
-  address      = "${var.opsman_ip}"
-  region       = "${var.region}"
-}
+# resource "google_compute_address" "opsman" {
+#   name = "${var.env_name}-cf-opsman"
+#   project     = "${google_project.pcf_project.project_id}"
+# }
 
 resource "google_compute_instance" "ops-manager" {
-  depends_on = ["google_compute_address.opsman_ip"]
+  project = "${google_project.pcf_project.project_id}"
   name           = "${var.env_name}-ops-manager"
   machine_type   = "${var.opsman_machine_type}"
   zone           = "${element(var.zones, 1)}"
   create_timeout = 10
-  tags           = ["${var.env_name}-ops-manager","${var.env_name}", "ext-ssh"]
-  project = "${var.project}"
-//  service_account = ["${var.opsman_service_account}"]
+  tags           = ["${var.env_name}-ops-manager"]
+  allow_stopping_for_update = "true"
 
   boot_disk {
     initialize_params {
       image = "${google_compute_image.ops-manager-image.self_link}"
-      size  = 250
+      size  = 50
       type  = "pd-ssd"
     }
   }
 
   service_account {
-    email = "${var.opsman_service_account}"
+    email = "${google_service_account.ops_manager.email}"
     scopes = ["cloud-platform"]
   }
 
   network_interface {
-    subnetwork_project = "${var.shared_vpc_project}"
-    subnetwork = "${var.infra_subnet}"
+    subnetwork = "${google_compute_subnetwork.infra-subnet.self_link}"
     address    = "${var.opsman_ip}"
+    access_config {}
   }
 }
